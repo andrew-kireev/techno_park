@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.15)
+
 project(process)
 
 set(SOURCE_EXE src/main.cpp)
 
-set(SOURCE_LIB src/process.cpp)
+set(SOURCE_LIB src/process.cpp include/process.h)
 
 add_library(proc STATIC ${SOURCE_LIB})
 

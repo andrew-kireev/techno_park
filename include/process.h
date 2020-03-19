@@ -7,30 +7,36 @@
 
 #include <stdio.h>
 #include <string>
-#include <sys/types.h>
-#include <unistd.h>
-#include <signal.h>
 
-class Process
-{
-public:
-    explicit Process(const std::string& path);
-    ~Process();
-    size_t write(const void* data, size_t len);
-    void writeExact(const void* data, size_t len);
-    size_t read(void* data, size_t len);
-    void readExact(void* data, size_t len);
+namespace process{
 
-    bool isReadable() const;
-    void closeStdin();
+    class Process {
+    public:
+        explicit Process(const std::string &path);
 
-    void close();
-private:
-    pid_t pid, child_pid;
-    bool is_readable;
-    int pipefd_1[2];
-    int pipefd_2[2];
-};
+        ~Process();
 
+        size_t write(const void *data, size_t len);
 
+        void writeExact(const void *data, size_t len);
+
+        size_t read(void *data, size_t len);
+
+        void readExact(void *data, size_t len);
+
+        bool isReadable() const;
+
+        void closeStdin();
+
+        void close();
+
+    private:
+        //int pipefd_1[2];
+        int pipefd_2[2];
+        pid_t pid;
+        int stdin_, stdout_;
+        bool in_is_readable;
+        bool out_is_readable;
+    };
+}
 #endif //PROCESS_PROCESS_H
