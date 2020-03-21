@@ -3,44 +3,54 @@
 //
 
 
-#include "../include/process.h"
+#include "process.h"
 #include <unistd.h>
 #include <signal.h>
 #include <iostream>
+#include <stdexcept>
 
 namespace process{
 
     Process::Process(const std::string &path) {
         int pipefd_1[2];
         int pipefd_2[2];
-        pipe(pipefd_1);
-        pipe(pipefd_2);
-        pid = fork();
-        if (pid == -1) {
-            throw "Ошибка создания дочернего процесса";
-        } else if(pid == 0) {
-            dup2(pipefd_1[1], STDOUT_FILENO);
-            stdout_ = pipefd_1[1];
+         if(pipe(pipefd_1) == -1){
+                throw std::runtime_error("Ошибка создания pipe1");
+         }
+
+        if(pipe(pipefd_2) == -1){
+            ::close(pipefd_1[0]);
             ::close(pipefd_1[1]);
+            throw std::runtime_error(std::strerror(errno));
+        }
+
+        if((pid = fork()) == -1){
+            throw std::runtime_error("Ошибка создания дочнрнего процесса");
+        } else if(pid == 0) {
+            std::cout << "Child PID: " << getpid() << std::endl;
+            dup2(pipefd_1[1], STDOUT_FILENO);
+            ::close(pipefd_1[1]);
+            ::close(pipefd_1[0]);           //Возможно нужно удалить
             dup2(pipefd_2[0], STDIN_FILENO);
-            stdin_ = pipefd_2[0];
             ::close(pipefd_2[1]);
+            ::close(pipefd_2[0]);
             in_is_readable = true;
             out_is_readable = true;
-            fprintf(stderr, "Child PID: %i\n", getpid());
-            execl(path.c_str(), path.c_str(), NULL);
+            if(execl(path.c_str(), path.c_str(), NULL) < 0){
+                std::cerr << ("Ошибка подмены программы") << std::endl;
+            }
         } else{
             //parent
+            std::cout << "Parent PID: " << getpid() << std::endl;
             stdin_ = pipefd_1[0];
             stdout_ = pipefd_2[1];
             in_is_readable = true;
             out_is_readable = true;
-            fprintf(stderr, "Parent PID: %i\n", getpid());
         }
     }
 
 
-    Process::~Process() {
+    Process::~Process(){
         close();
         kill(pid, SIGCHLD);
         waitpid(pid, 0, WUNTRACED);
@@ -48,19 +58,16 @@ namespace process{
 
     std::size_t Process::write(const void *data, std::size_t len) {
         if (out_is_readable == false){
-            throw "Дескриптор ввода закрыт";
+            throw std::runtime_error("Дескриптор ввода закрыт");
         }
 
         ssize_t bytes = ::write(stdout_, data, len);
-//        if (static_cast<ssize_t>(bytes) < 0) {
-//            std::cerr << "Метод ничего не смог написать" << std::endl;
-//        }
         return static_cast<size_t>(bytes);
     }
 
     void Process::writeExact(const void *data, size_t len) {
         if (out_is_readable == false){
-            throw "Дескриптор ввода закрыт";
+            throw std::runtime_error("Дескриптор ввода закрыт");
         }
 
         ssize_t wr = 0, last_it = 0;
@@ -76,7 +83,7 @@ namespace process{
 
     std::size_t Process::read(void *data, std::size_t len) {
         if (in_is_readable == false){
-            throw "Дескриптор вывода закрыт";
+            throw std::runtime_error("Дескриптор вывода закрыт");
         }
 
         ssize_t bytes = ::read(stdin_, data, len);
@@ -88,7 +95,7 @@ namespace process{
 
     void Process::readExact(void *data, size_t len) {
         if (in_is_readable == false){
-            throw "Дескриптор вывода закрыт";
+            throw std::runtime_error("Дескриптор вывода закрыт");
         }
 
         std::size_t read = 0, last_it = 0;

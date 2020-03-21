@@ -1,7 +1,7 @@
 //
 // Created by Andrew Kireev on 10.03.2020.
 //
-#include "../include/process.h"
+#include "process.h"
 #include <iostream>
 
 
@@ -14,7 +14,7 @@ int main (int argc, char * argv[])
 
 
 
-    pr.write(data, 6);
+    pr.write(data,6 );
     pr.read(new_data, 6);
     for(int i = 0; i < 6; ++i){
         std::cout << new_data[i];

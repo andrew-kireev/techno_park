@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <string>
+#include <stdexcept>
 
 namespace process{
 
@@ -31,7 +32,6 @@ namespace process{
         void close();
 
     private:
-        //int pipefd_1[2];
         int pipefd_2[2];
         pid_t pid;
         int stdin_, stdout_;
