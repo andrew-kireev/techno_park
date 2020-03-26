@@ -5,9 +5,10 @@
 
 #include "process.h"
 #include <unistd.h>
-#include <signal.h>
+#include <csignal>
+#include <cstring>
 #include <iostream>
-#include <stdexcept>
+
 
 namespace process{
 
@@ -35,7 +36,6 @@ namespace process{
             ::close(pipefd_2[1]);
             ::close(pipefd_2[0]);
             in_is_readable = true;
-            out_is_readable = true;
             if(execl(path.c_str(), path.c_str(), NULL) < 0){
                 std::cerr << ("Ошибка подмены программы") << std::endl;
             }
@@ -45,7 +45,6 @@ namespace process{
             stdin_ = pipefd_1[0];
             stdout_ = pipefd_2[1];
             in_is_readable = true;
-            out_is_readable = true;
         }
     }
 
@@ -53,26 +52,18 @@ namespace process{
     Process::~Process(){
         close();
         kill(pid, SIGCHLD);
-        waitpid(pid, 0, WUNTRACED);
+        waitpid(pid, nullptr, WUNTRACED);
     }
 
     std::size_t Process::write(const void *data, std::size_t len) {
-        if (out_is_readable == false){
-            throw std::runtime_error("Дескриптор ввода закрыт");
-        }
-
         ssize_t bytes = ::write(stdout_, data, len);
         return static_cast<size_t>(bytes);
     }
 
     void Process::writeExact(const void *data, size_t len) {
-        if (out_is_readable == false){
-            throw std::runtime_error("Дескриптор ввода закрыт");
-        }
-
         ssize_t wr = 0, last_it = 0;
         while (wr != len) {
-            wr += static_cast<std::size_t>(::write(stdout_, static_cast<const char*>(data) + wr, len - wr));
+            wr += static_cast<std::size_t>(write(static_cast<const char*>(data) + wr, len - wr));
             if (wr == last_it) {
                 throw std::runtime_error("Полученно недостаточное количество байт для записи");
             }
@@ -87,7 +78,9 @@ namespace process{
         }
 
         ssize_t bytes = ::read(stdin_, data, len);
-        if (!(bytes > 0)) {
+        if (bytes == 0) {
+            in_is_readable = false;
+        } else if (bytes < 0) {
             std::cerr << "Метод ничего не смог прочитать" << std::endl;
         }
         return static_cast<std::size_t>(bytes);
@@ -109,7 +102,7 @@ namespace process{
     }
 
     bool Process::isReadable() const {
-        return in_is_readable && out_is_readable;
+        return in_is_readable;
     }
 
     void Process::closeStdin() {
@@ -121,7 +114,6 @@ namespace process{
         ::close(stdout_);
         ::close(stdin_);
         in_is_readable = false;
-        out_is_readable = false;
     }
 }
 

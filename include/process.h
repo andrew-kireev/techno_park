@@ -5,9 +5,8 @@
 #ifndef PROCESS_PROCESS_H
 #define PROCESS_PROCESS_H
 
-#include <stdio.h>
+
 #include <string>
-#include <stdexcept>
 
 namespace process{
 
@@ -32,11 +31,9 @@ namespace process{
         void close();
 
     private:
-        int pipefd_2[2];
         pid_t pid;
         int stdin_, stdout_;
         bool in_is_readable;
-        bool out_is_readable;
     };
 }
 #endif //PROCESS_PROCESS_H

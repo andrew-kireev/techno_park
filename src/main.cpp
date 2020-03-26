@@ -3,22 +3,21 @@
 //
 #include "process.h"
 #include <iostream>
+#include <string>
 
 
 int main (int argc, char * argv[])
 {
 
-    process::Process pr("");
-    const char data[6] = {'p', 'r', 'i', 'v', 'e', 't'};
-    char new_data[6];
+    process::Process pr("/bin/pwd");
+    const char *data = "privet";
+    char new_data[100];
 
+    pr.writeExact(data,3 );
+    pr.readExact(new_data, 50);
+    std::string str = new_data;
 
-
-    pr.write(data,6 );
-    pr.read(new_data, 6);
-    for(int i = 0; i < 6; ++i){
-        std::cout << new_data[i];
-    }
+    std::cout << str << std::endl;
 
     return 0;
 }
