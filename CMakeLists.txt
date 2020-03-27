@@ -23,6 +23,6 @@ add_subdirectory(${LIB_DIR})
 
 add_executable(${TARGET_NAME} ${MAIN})
 
-target_link_libraries(${TARGET_NAME} LINK_PUBLIC ${LIB_NAME})
+target_link_libraries(${TARGET_NAME} PUBLIC ${LIB_NAME})
 
 target_include_directories(${TARGET_NAME} PUBLIC ${LIB_DIR})
