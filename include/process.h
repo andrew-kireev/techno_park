@@ -14,7 +14,7 @@ namespace process{
     public:
         explicit Process(const std::string &path);
 
-        ~Process();
+        ~Process() noexcept;
 
         size_t write(const void *data, size_t len);
 

@@ -2,12 +2,12 @@
 // Created by Andrew Kireev on 10.03.2020.
 //
 
-
 #include "process.h"
 #include <unistd.h>
 #include <csignal>
 #include <cstring>
 #include <iostream>
+#include <sys/wait.h>
 
 
 namespace process{
@@ -22,7 +22,7 @@ namespace process{
         if(pipe(pipefd_2) == -1){
             ::close(pipefd_1[0]);
             ::close(pipefd_1[1]);
-            throw std::runtime_error(std::strerror(errno));
+            throw std::runtime_error("Ошибка создания pipe2");
         }
 
         if((pid = fork()) == -1){
@@ -36,8 +36,8 @@ namespace process{
             ::close(pipefd_2[1]);
             ::close(pipefd_2[0]);
             in_is_readable = true;
-            if(execl(path.c_str(), path.c_str(), NULL) < 0){
-                std::cerr << ("Ошибка подмены программы") << std::endl;
+            if (execl(path.c_str(), path.c_str(), NULL) < 0) {
+                throw std::runtime_error("Ошибка подмена прогораммы");
             }
         } else{
             //parent
@@ -49,7 +49,7 @@ namespace process{
     }
 
 
-    Process::~Process(){
+    Process::~Process() noexcept{
         close();
         kill(pid, SIGCHLD);
         waitpid(pid, nullptr, WUNTRACED);
@@ -57,19 +57,21 @@ namespace process{
 
     std::size_t Process::write(const void *data, std::size_t len) {
         ssize_t bytes = ::write(stdout_, data, len);
-        return static_cast<size_t>(bytes);
+        if(bytes < 0){
+            throw std::runtime_error("Write не смог ничего написать");
+        }
+        return bytes;
     }
 
     void Process::writeExact(const void *data, size_t len) {
         ssize_t wr = 0, last_it = 0;
         while (wr != len) {
-            wr += static_cast<std::size_t>(write(static_cast<const char*>(data) + wr, len - wr));
+            wr += write(static_cast<const char*>(data) + wr, len - wr);
             if (wr == last_it) {
                 throw std::runtime_error("Полученно недостаточное количество байт для записи");
             }
             last_it = wr;
         }
-        fflush(stdout);
     }
 
     std::size_t Process::read(void *data, std::size_t len) {
@@ -81,7 +83,7 @@ namespace process{
         if (bytes == 0) {
             in_is_readable = false;
         } else if (bytes < 0) {
-            std::cerr << "Метод ничего не смог прочитать" << std::endl;
+            throw std::runtime_error("Метод ничего не смог прочитать");
         }
         return static_cast<std::size_t>(bytes);
     }
@@ -92,8 +94,13 @@ namespace process{
         }
 
         std::size_t read = 0, last_it = 0;
+        ssize_t num;
         while (read != len) {
-            read += static_cast<std::size_t>(::read(stdin_, static_cast<char *>(data) + read, len - read));
+            num = ::read(stdin_, static_cast<char *>(data) + read, len - read);
+            if(num < 0 && read == 0){
+                throw std::runtime_error("Невозможно ничего прочитать");
+            }
+            read += num;
             if (read == last_it) {
                 throw std::runtime_error("Полученно недостаточное количество байт для чтения");
             }
@@ -106,14 +113,17 @@ namespace process{
     }
 
     void Process::closeStdin() {
+        if(::close(stdin_) < 0){
+            throw std::runtime_error("Ошибка закрытия дескриптора");
+        }
         in_is_readable = false;
-        ::close(stdin_);
     }
 
     void Process::close() {
-        ::close(stdout_);
-        ::close(stdin_);
-        in_is_readable = false;
+        if(::close(stdout_) < 0){
+            throw std::runtime_error("Ошибка закрытия дескриптора");
+        }
+        closeStdin();
     }
 }
 
