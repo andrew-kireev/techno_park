@@ -2,23 +2,29 @@
 // Created by Andrew Kireev on 30.03.2020.
 //
 
-#include "include/Server.h"
+#include "Server.h"
+#include <exception>
+#include <stdexcept>
+#include <zconf.h>
+#include <arpa/inet.h>
 
 namespace server {
 
-    Server::Server(int ip, int port) {
+    Server::Server(std::string ip, int port) {
         listenfd_ = socket(AF_INET, SOCK_STREAM, 0);
-        if (listener < 0) {
+        if (listenfd_ < 0) {
             throw std::runtime_error("Ошибка создание сокета");
         }
 
         addr_.sin_family = AF_INET;
         addr_.sin_port = htons(port);
-        addr_.sin_addr.s_addr = htonl(ip);
+        if (::inet_aton(ip.c_str(), &addr_.sin_addr) == 0){
+
+}
         if (bind(listenfd_, (struct sockaddr *) &addr_, sizeof(addr_)) < 0) {
             throw std::runtime_error("Ошибка bind");
         }
-        listen(listenfd_, 1);
+        listen(listenfd_, max_connection_);
         server_stat = true;
     }
 
@@ -30,19 +36,21 @@ namespace server {
     }
 
     Connection Server::accept(){
-        int sock = accept(listener, NULL, NULL);
+        sockaddr_in client_addr;
+        int sock = ::accept(listenfd_, (struct sockaddr *)&client_addr,
+                            reinterpret_cast<socklen_t *>(sizeof(client_addr)));
         if(sock < 0){
             throw std::runtime_error("Ошибка соединения");
         }
-        Connction con(addr_.sin_addr.s_addr, addr_.sin_port);
+        Connection con(ip_, addr_.sin_port);
         return con;
     }
 
-    void Server::open(int ip, int port){
+    void Server::open(std::string ip, int port){
         Server(ip, port);
     }
 
     void Server::set_max_connection(int num_connections){
-
+        max_connection_ = num_connections;
     }
 }

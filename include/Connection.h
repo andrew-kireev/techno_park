@@ -8,35 +8,36 @@
 #include <cstdio>
 #include <sys/types.h>
 #include <netinet/in.h>
+#include <string>
 
 
 namespace server {
 
     class Connection {
     public:
-        Connection(int ip,int port);
+        Connection(std::string ip, int port);
 
-        void write(const void *data, size_t size);
+        ssize_t write(const void *data, size_t size);
 
-        void read(void *data, size_t size);
+        ssize_t read(void *data, size_t size);
 
         void close();
 
         bool is_opened() const;
 
-        ssize_t writeExact(const void *data, size_t size);
+        void writeExact(const void *data, size_t size);
 
-        ssize_t readExact(void *data, size_t size);
+        void readExact(void *data, size_t size);
 
-        void set_timout(int time);
+        void set_timeout(int time);
 
-        void connect(int addr,int port);
+        void connect(const std::string& addr, int port);
 
 
     private:
         int sockfd_;
-        int src_addr;
-        int dst_addr;
+        std::string src_addr;
+        std::string dst_addr;
         int src_port;
         int dst_port;
         bool is_open_ = false;

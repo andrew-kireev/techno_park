@@ -7,4 +7,4 @@ set(LIB ${LIB_DIR}/Connection.cpp
 
 add_library(${LIB_NAME} SHARED ${LIB})
 
-target_include_directories(${LIB_NAME} PUBLIC ./include)
+target_include_directories(${LIB_NAME} PUBLIC ${INC_DIR})

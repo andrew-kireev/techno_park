@@ -4,28 +4,32 @@
 
 
 #include <exception>
+#include <stdexcept>
+#include <zconf.h>
+#include <arpa/inet.h>
 
 #include "Connection.h"
 
 
 namespace server {
 
-    Connection::Connection(int ip,int port) : src_addr(ip), src_port(port){
+    Connection::Connection(std::string ip,int port) : dst_addr(ip), dst_port(port){
         sockfd_ = socket(AF_INET, SOCK_STREAM, 0);
-        if(sock < 0){
+        if(sockfd_ < 0){
             throw std::runtime_error("Ошибка создания сокета");
         }
 
-        addr.sin_family = AF_INET;
-        addr.sin_port = htons(port); // или любой другой порт...
-        addr.sin_addr.s_addr = htonl(ip);
+//        addr.sin_family = AF_INET;
+//        addr.sin_port = htons(port); // или любой другой порт...
+//        addr.sin_addr.s_addr = htonl(ip);
     }
 
-    void Connection::write(const void *data, std::size_t len) {
-        ssize_t bytes = ::write(stdout_, data, len);
+    ssize_t Connection::write(const void *data, std::size_t len) {
+        ssize_t bytes = ::write(STDOUT_FILENO, data, len);
         if(bytes < 0){
             throw std::runtime_error("Write не смог ничего написать");
         }
+        return bytes;
     }
 
     void Connection::writeExact(const void *data, size_t len) {
@@ -39,28 +43,28 @@ namespace server {
         }
     }
 
-    void Connection::read(void *data, std::size_t len) {
-        if (in_is_readable == false){
+    ssize_t Connection::read(void *data, std::size_t len) {
+        if (is_open_ == false){
             throw std::runtime_error("Дескриптор вывода закрыт");
         }
 
-        ssize_t bytes = ::read(stdin_, data, len);
+        ssize_t bytes = ::read(STDIN_FILENO, data, len);
         if (bytes == 0) {
-            in_is_readable = false;
+            is_open_ = false;
         } else if (bytes < 0) {
             throw std::runtime_error("Метод ничего не смог прочитать");
         }
     }
 
     void Connection::readExact(void *data, size_t len) {
-        if (in_is_readable == false){
+        if (is_open_ == false){
             throw std::runtime_error("Дескриптор вывода закрыт");
         }
 
         std::size_t read = 0, last_it = 0;
         ssize_t num;
         while (read != len) {
-            num = ::read(stdin_, static_cast<char *>(data) + read, len - read);
+            num = ::read(STDIN_FILENO, static_cast<char *>(data) + read, len - read);
             if(num < 0 && read == 0){
                 throw std::runtime_error("Невозможно ничего прочитать");
             }
@@ -73,18 +77,34 @@ namespace server {
     }
 
     void Connection::close(){
-        if(::close(listenfd_) < 0){
+        if(::close(sockfd_) < 0){
             throw std::runtime_error("Ошибка закрытия сервера");
         }
         is_open_ = false;
     }
 
-    bool is_open() const{
+    bool Connection::is_opened() const {
         return is_open_;
     }
 
-    void set_timeout(int time){
+    void Connection::set_timeout(int time){
         timeout = time;
+    }
+
+    void Connection::connect(const std::string& addr, int port) {
+        struct sockaddr_in addr_;
+
+        sockfd_ = socket(AF_INET, SOCK_STREAM, 0);
+        if(sockfd_ < 0){
+            throw std::runtime_error("Ошибка создания сокета");
+        }
+
+        addr_.sin_family = AF_INET;
+        addr_.sin_port = htons(port);
+        addr_.sin_addr.s_addr = ::inet_addr(addr.c_str());
+        if(::connect(sockfd_, (struct sockaddr *)&addr_, sizeof(addr_)) < 0){
+            throw std::runtime_error("Ошибка соединения");
+        }
     }
 
 }
