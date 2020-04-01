@@ -49,10 +49,16 @@ namespace process{
     }
 
 
+
+
     Process::~Process() noexcept{
-        close();
-        kill(pid, SIGCHLD);
-        waitpid(pid, nullptr, WUNTRACED);
+        try {
+            close();
+            kill(pid, SIGCHLD);
+            waitpid(pid, nullptr, WUNTRACED);
+        } catch (std::runtime_error& er){
+            std::cerr << "Ошибка закрытия дескриптора" << er.what() << std::endl;
+        }
     }
 
     std::size_t Process::write(const void *data, std::size_t len) {

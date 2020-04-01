@@ -8,19 +8,32 @@
 
 int main (int argc, char * argv[])
 {
+    try {
+        process::Process pr("/bin/cat");
+        std::string in = "privet";
+        std::string out;
 
-    process::Process pr("/bin/cat");
-    const char *data = "privet";
-    char new_data[100];
-
-    pr.writeExact(data, 50 );
-    pr.read(new_data, 50);
-    std::string str = new_data;
-
-    std::cout << str << std::endl;
+        pr.writeExact(in.data(), in.size());
+        out.resize(in.size());
+        pr.readExact(out.data(), out.size());
+        std::cout << out << std::endl;
 
 
-    process::Process proc(argv[1]);
 
+        if (argc < 2) {
+            throw std::runtime_error("Недостаточное количество аргуметнов");
+        }
+        process::Process proc(argv[1]);       //  "/bin/cat"
+        while (in.size() > 0) {
+            in.clear();
+            std::cin >> in;
+            out.resize(in.size());
+            proc.writeExact(in.data(), in.size());
+            proc.readExact(out.data(), out.size());
+            std::cout << out << std::endl;
+        }
+    }catch (std::runtime_error& er){
+        std::cerr << er.what() << std::endl;
+    }
     return 0;
 }
