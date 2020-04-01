@@ -10,14 +10,14 @@ namespace logger{
 
     FileLogger::FileLogger() : file_("Log.txt") {
         if (!file_) {
-            throw std::runtime_error("Ошибка создания файла");
+            throw std::runtime_error("file open error");
         }
     }
 
 
     FileLogger::FileLogger(const std::string& path) : file_(path) {
         if (!file_) {
-            throw std::runtime_error("Ошибка откртия файла");
+            throw std::runtime_error("file open error");
         }
     }
 
