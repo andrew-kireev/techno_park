@@ -35,7 +35,6 @@ namespace process{
             dup2(pipefd_2[0], STDIN_FILENO);
             ::close(pipefd_2[1]);
             ::close(pipefd_2[0]);
-            in_is_readable = true;
             if (execl(path.c_str(), path.c_str(), NULL) < 0) {
                 throw std::runtime_error("Ошибка подмена прогораммы");
             }
@@ -54,8 +53,8 @@ namespace process{
     Process::~Process() noexcept{
         try {
             close();
-            kill(pid, SIGCHLD);
-            waitpid(pid, nullptr, WUNTRACED);
+            kill(pid, SIGTERM);
+            waitpid(pid, nullptr, 0);
         } catch (std::runtime_error& er){
             std::cerr << "Ошибка закрытия дескриптора" << er.what() << std::endl;
         }
@@ -71,7 +70,7 @@ namespace process{
 
     void Process::writeExact(const void *data, size_t len) {
         ssize_t wr = 0, last_it = 0;
-        while (wr != len) {
+        while (static_cast<ssize_t>(wr) != len) {
             wr += write(static_cast<const char*>(data) + wr, len - wr);
             if (wr == last_it) {
                 throw std::runtime_error("Полученно недостаточное количество байт для записи");
