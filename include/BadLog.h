@@ -12,7 +12,7 @@ namespace logger {
 
     class BadLog : std::exception{
     public:
-        BadLog(std::string& msg) : str(std::move(msg)){}
+        BadLog(std::string msg) : str(std::move(msg)){}
         const char* what() const noexcept {
             return str.c_str();
         }
