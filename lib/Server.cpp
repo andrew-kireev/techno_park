@@ -2,30 +2,40 @@
 // Created by Andrew Kireev on 30.03.2020.
 //
 
-#include "Server.h"
-#include <exception>
-#include <stdexcept>
-#include <zconf.h>
+#include <sys/socket.h>
 #include <arpa/inet.h>
+#include <unistd.h>
+#include <iostream>
+
+#include "Server.h"
 
 namespace server {
 
-    Server::Server(std::string ip, int port) {
+    Server::Server(const std::string& ip, uint16_t port) {
         listenfd_ = socket(AF_INET, SOCK_STREAM, 0);
         if (listenfd_ < 0) {
             throw std::runtime_error("Ошибка создание сокета");
         }
 
-        addr_.sin_family = AF_INET;
-        addr_.sin_port = htons(port);
-        if (::inet_aton(ip.c_str(), &addr_.sin_addr) == 0){
+        struct sockaddr_in addr{};
 
-}
-        if (bind(listenfd_, (struct sockaddr *) &addr_, sizeof(addr_)) < 0) {
+        addr.sin_family = AF_INET;
+        addr.sin_port = htons(port);
+        addr.sin_addr.s_addr = inet_addr(ip.c_str());
+        if (bind(listenfd_, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) != 0) {
+            close();
             throw std::runtime_error("Ошибка bind");
         }
         listen(listenfd_, max_connection_);
         server_stat = true;
+    }
+
+    Server::~Server() noexcept{
+        try {
+            close();
+        } catch (std::runtime_error& er){
+            std::cerr << "Ошибка закрытия дескриптора" << er.what() << std::endl;
+        }
     }
 
     void Server::close(){
@@ -36,17 +46,19 @@ namespace server {
     }
 
     Connection Server::accept(){
-        sockaddr_in client_addr;
-        int sock = ::accept(listenfd_, (struct sockaddr *)&client_addr,
-                            reinterpret_cast<socklen_t *>(sizeof(client_addr)));
+        sockaddr_in client_addr{};
+        socklen_t size = sizeof(client_addr);
+        int sock = ::accept(listenfd_, reinterpret_cast<sockaddr*>(&client_addr), &size);
         if(sock < 0){
             throw std::runtime_error("Ошибка соединения");
         }
-        Connection con(ip_, addr_.sin_port);
-        return con;
+        return Connection(sock, client_addr);
     }
 
-    void Server::open(std::string ip, int port){
+    void Server::open(const std::string& ip, int port){
+        if (server_stat) {
+            throw std::runtime_error("Сервер уже открыт");
+        }
         Server(ip, port);
     }
 

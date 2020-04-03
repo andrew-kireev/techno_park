@@ -13,22 +13,22 @@ namespace server {
 
     class Server {
     public:
-        Server(std::string ip, int port);
+        Server(const std::string& ip, uint16_t port);
+
+        ~Server() noexcept;
 
         void close();
 
         Connection accept();
 
-        void open(std::string ip, int port);
+        void open(const std::string& ip, int port);
 
         void set_max_connection(int num_connections);
 
     private:
         int listenfd_;
-        std::string ip_;
         bool server_stat = false;
         size_t max_connection_ = 1;
-        struct sockaddr_in addr_;
     };
 
 

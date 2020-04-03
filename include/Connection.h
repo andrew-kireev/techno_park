@@ -15,7 +15,11 @@ namespace server {
 
     class Connection {
     public:
-        Connection(std::string ip, int port);
+        Connection(std::string ip, uint16_t port);
+
+        Connection(int& sock_fd, const sockaddr_in& sock_info);
+
+        ~Connection() noexcept;
 
         ssize_t write(const void *data, size_t size);
 
@@ -31,18 +35,17 @@ namespace server {
 
         void set_timeout(int time);
 
-        void connect(const std::string& addr, int port);
+        void connect(const std::string& addr, uint16_t port);
 
+        void send_size(const size_t& data);
+
+        void recv_size(size_t& data);
 
     private:
         int sockfd_;
-        std::string src_addr;
         std::string dst_addr;
-        int src_port;
-        int dst_port;
+        uint16_t dst_port;
         bool is_open_ = false;
-        int timeout = 0;
-
     };
 
 
