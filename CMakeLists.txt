@@ -8,13 +8,9 @@ set(SOURCE_EXE "src/main.cpp")
 
 set(SOURCE_LIB "src/process.cpp")
 
-set(ECHO_PROC "src/echo.cpp")
-
 add_library(proc STATIC ${SOURCE_LIB})
 
 add_executable(main ${SOURCE_EXE})
-
-add_executable(echo ${ECHO_PROC})
 
 target_include_directories(proc PUBLIC ./include)
 

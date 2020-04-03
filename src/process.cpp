@@ -69,8 +69,8 @@ namespace process{
     }
 
     void Process::writeExact(const void *data, size_t len) {
-        ssize_t wr = 0, last_it = 0;
-        while (static_cast<ssize_t>(wr) != len) {
+        size_t wr = 0, last_it = 0;
+        while (wr != len) {
             wr += write(static_cast<const char*>(data) + wr, len - wr);
             if (wr == last_it) {
                 throw std::runtime_error("Полученно недостаточное количество байт для записи");
@@ -99,12 +99,9 @@ namespace process{
         }
 
         std::size_t read = 0, last_it = 0;
-        ssize_t num;
+        size_t num;
         while (read != len) {
             num = ::read(stdin_, static_cast<char *>(data) + read, len - read);
-            if(num < 0 && read == 0){
-                throw std::runtime_error("Невозможно ничего прочитать");
-            }
             read += num;
             if (read == last_it) {
                 throw std::runtime_error("Полученно недостаточное количество байт для чтения");
@@ -121,6 +118,7 @@ namespace process{
         if(::close(stdin_) < 0){
             throw std::runtime_error("Ошибка закрытия дескриптора");
         }
+        stdin_ = -1;
         in_is_readable = false;
     }
 
@@ -129,6 +127,7 @@ namespace process{
             throw std::runtime_error("Ошибка закрытия дескриптора");
         }
         closeStdin();
+        stdout_ = -1;
     }
 }
 
