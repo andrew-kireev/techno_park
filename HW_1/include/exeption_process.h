@@ -1,8 +1,0 @@
-//
-// Created by Andrew Kireev on 21.03.2020.
-//
-
-#ifndef PROCESS_EXEPTION_PROCESS_H
-#define PROCESS_EXEPTION_PROCESS_H
-
-#endif //PROCESS_EXEPTION_PROCESS_H
