@@ -38,7 +38,7 @@ namespace server {
         }
     }
 
-    ssize_t Connection::write(const void *data, std::size_t len) {
+    size_t Connection::write(const void *data, std::size_t len) {
         ssize_t bytes = ::write(sockfd_, data, len);
         if(bytes < 0){
             throw std::runtime_error("Write не смог ничего написать");
@@ -47,7 +47,7 @@ namespace server {
     }
 
     void Connection::writeExact(const void *data, size_t len) {
-        ssize_t wr = 0, last_it = 0;
+        size_t wr = 0, last_it = 0;
         while (wr != len) {
             wr += write(static_cast<const char*>(data) + wr, len - wr);
             if (wr == last_it) {
@@ -57,7 +57,7 @@ namespace server {
         }
     }
 
-    ssize_t Connection::read(void *data, std::size_t len) {
+    size_t Connection::read(void *data, std::size_t len) {
         if (!is_open_){
             throw std::runtime_error("Дескриптор вывода закрыт");
         }
@@ -77,7 +77,7 @@ namespace server {
         }
 
         std::size_t read = 0, last_it = 0;
-        ssize_t num;
+        size_t num;
         while (read != len) {
             num = ::read(sockfd_, static_cast<char *>(data) + read, len - read);
             if(num < 0 && read == 0){

@@ -21,13 +21,13 @@ namespace server {
 
         ~Connection() noexcept;
 
-        ssize_t write(const void *data, size_t size);
+        size_t write(const void *data, size_t size);
 
-        ssize_t read(void *data, size_t size);
+        size_t read(void *data, size_t size);
 
         void close();
 
-        bool is_opened() const;
+        [[nodiscard]] bool is_opened() const;
 
         void writeExact(const void *data, size_t size);
 
