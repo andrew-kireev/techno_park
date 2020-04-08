@@ -27,7 +27,7 @@ namespace server {
 
     private:
         int listenfd_;
-        bool server_stat = false;
+        bool server_stat_ = false;
         size_t max_connection_ = 1;
     };
 

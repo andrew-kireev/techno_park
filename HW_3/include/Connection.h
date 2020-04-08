@@ -15,9 +15,9 @@ namespace server {
 
     class Connection {
     public:
-        Connection(std::string ip, uint16_t port);
+        friend class Server;
 
-        Connection(int& sock_fd, const sockaddr_in& sock_info);
+        Connection(const std::string ip, const uint16_t port);
 
         ~Connection() noexcept;
 
@@ -42,9 +42,11 @@ namespace server {
         void recv_size(size_t& data);
 
     private:
+        Connection(int sock_fd, const sockaddr_in& sock_info);
+        
         int sockfd_;
-        std::string dst_addr;
-        uint16_t dst_port;
+        std::string dst_addr_;
+        uint16_t dst_port_;
         bool is_open_ = false;
     };
 

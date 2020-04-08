@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.15)
 
 set(CMAKE_CXX_STANDARD 20)
 
-set(LIB ${LIB_DIR}/Connection.cpp
-        ${LIB_DIR}/Server.cpp)
+set(LIB Connection.cpp
+        Server.cpp)
 
 add_library(${LIB_NAME} SHARED ${LIB})
 

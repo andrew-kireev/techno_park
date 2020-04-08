@@ -13,19 +13,17 @@
 
 namespace server {
 
-    Connection::Connection(std::string ip, uint16_t port) : dst_addr(std::move(ip)), dst_port(port), is_open_(true){
+    Connection::Connection(const std::string ip, uint16_t port) : dst_addr_(std::move(ip)), dst_port_(port){
         sockfd_ = socket(AF_INET, SOCK_STREAM, 0);
         if(sockfd_ < 0){
+            close();
             throw std::runtime_error("Ошибка создания сокета");
         }
-        connect(dst_addr, port);
+        connect(dst_addr_, port);
     }
 
-    Connection::Connection(int& sockfd, const sockaddr_in& sock): sockfd_(sockfd),
-                                                                 dst_port(sock.sin_port), is_open_(true){
-        if(sockfd_ < 0){
-            throw std::runtime_error("Ошибка создания сокета");
-        }
+    Connection::Connection(int sockfd, const sockaddr_in& sock): sockfd_(sockfd),
+                                                                 dst_port_(sock.sin_port), is_open_(true){
         sockfd = -1;
     }
 
@@ -92,8 +90,10 @@ namespace server {
     }
 
     void Connection::close(){
-        if(::close(sockfd_) < 0){
-            throw std::runtime_error("Ошибка закрытия сервера");
+        if(sockfd_ != -1 && !is_open_) {
+            if (::close(sockfd_) < 0) {
+                throw std::runtime_error("Ошибка закрытия сервера");
+            }
         }
         is_open_ = false;
     }
@@ -125,16 +125,17 @@ namespace server {
     }
 
     void Connection::connect(const std::string& addr, uint16_t port) {
-        is_open_ = true;
         struct sockaddr_in addr_{};
-        dst_addr = addr;
+        dst_addr_ = addr;
 
         addr_.sin_family = AF_INET;
         addr_.sin_port = htons(port);
         addr_.sin_addr.s_addr = ::inet_addr(addr.c_str());
         if(::connect(sockfd_, (struct sockaddr *)&addr_, sizeof(addr_)) < 0){
+            close();
             throw std::runtime_error("Ошибка соединения");
         }
+        is_open_ = true;
     }
 
 }
