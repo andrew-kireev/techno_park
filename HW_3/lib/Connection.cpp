@@ -13,7 +13,7 @@
 
 namespace server {
 
-    Connection::Connection(const std::string ip, uint16_t port) : dst_addr_(std::move(ip)), dst_port_(port){
+    Connection::Connection(std::string ip, uint16_t port) : dst_addr_(std::move(ip)), dst_port_(port){
         sockfd_ = socket(AF_INET, SOCK_STREAM, 0);
         if(sockfd_ < 0){
             close();

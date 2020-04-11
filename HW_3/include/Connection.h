@@ -17,7 +17,7 @@ namespace server {
     public:
         friend class Server;
 
-        Connection(const std::string ip, const uint16_t port);
+        Connection(std::string ip, const uint16_t port);
 
         ~Connection() noexcept;
 
