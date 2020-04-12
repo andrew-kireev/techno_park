@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "Server.h"
+#include "exception.h"
 
 namespace server {
 
@@ -19,14 +20,14 @@ namespace server {
         try {
             close();
         } catch (std::runtime_error& er){
-            std::cerr << "Ошибка закрытия дескриптора" << er.what() << std::endl;
+            std::cerr << "close failed" << er.what() << std::endl;
         }
     }
 
     void Server::close(){
         if(listenfd_ != -1 && !server_stat_) {
             if (::close(listenfd_) < 0) {
-                throw std::runtime_error("Ошибка закрытия сервера");
+                throw TcpException("server close failed");
             }
         }
         server_stat_ = false;
@@ -37,7 +38,7 @@ namespace server {
         socklen_t size = sizeof(client_addr);
         int sock = ::accept(listenfd_, reinterpret_cast<sockaddr*>(&client_addr), &size);
         if(sock < 0){
-            throw std::runtime_error("Ошибка соединения");
+            throw TcpException("connection failed");
         }
         return Connection(sock, client_addr);
     }
@@ -46,7 +47,7 @@ namespace server {
     void Server::open(const std::string& ip, int port){
         listenfd_ = socket(AF_INET, SOCK_STREAM, 0);
         if (listenfd_ < 0) {
-            throw std::runtime_error("Ошибка создание сокета");
+            throw TcpException("creating socket failed");
         }
 
         struct sockaddr_in addr{};
@@ -56,7 +57,7 @@ namespace server {
         addr.sin_addr.s_addr = inet_addr(ip.c_str());
         if (bind(listenfd_, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) != 0) {
             close();
-            throw std::runtime_error("Ошибка bind");
+            throw TcpException("bind failed");
         }
         set_max_connection(max_connection_);
         server_stat_ = true;

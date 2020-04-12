@@ -9,6 +9,7 @@
 #include <iostream>
 
 #include "Connection.h"
+#include "exception.h"
 
 
 namespace server {
@@ -17,7 +18,7 @@ namespace server {
         sockfd_ = socket(AF_INET, SOCK_STREAM, 0);
         if(sockfd_ < 0){
             close();
-            throw std::runtime_error("Ошибка создания сокета");
+            throw TcpException("socket creating failed");
         }
         connect(dst_addr_, port);
     }
@@ -31,15 +32,15 @@ namespace server {
     Connection::~Connection() noexcept{
         try {
             close();
-        } catch (std::runtime_error& er){
-            std::cerr << "Ошибка закрытия дескриптора" << er.what() << std::endl;
+        } catch (TcpException& er){
+            std::cerr << "close failed" << er.what() << std::endl;
         }
     }
 
     size_t Connection::write(const void *data, std::size_t len) {
         ssize_t bytes = ::write(sockfd_, data, len);
         if(bytes < 0){
-            throw std::runtime_error("Write не смог ничего написать");
+            throw TcpException("could not write anything");
         }
         return bytes;
     }
@@ -49,7 +50,7 @@ namespace server {
         while (wr != len) {
             wr += write(static_cast<const char*>(data) + wr, len - wr);
             if (wr == last_it) {
-                throw std::runtime_error("Полученно недостаточное количество байт для записи");
+                throw TcpException("received not enough to write");
             }
             last_it = wr;
         }
@@ -57,21 +58,21 @@ namespace server {
 
     size_t Connection::read(void *data, std::size_t len) {
         if (!is_open_){
-            throw std::runtime_error("Дескриптор вывода закрыт");
+            throw TcpException("closed descriptor");
         }
 
         ssize_t bytes = ::read(sockfd_, data, len);
         if (bytes == 0) {
             is_open_ = false;
         } else if (bytes < 0) {
-            throw std::runtime_error("Метод ничего не смог прочитать");
+            throw TcpException("could not read anything");
         }
         return bytes;
     }
 
     void Connection::readExact(void *data, size_t len) {
         if (!is_open_){
-            throw std::runtime_error("Дескриптор вывода закрыт");
+            throw TcpException("closed descriptor");
         }
 
         std::size_t read = 0, last_it = 0;
@@ -79,11 +80,11 @@ namespace server {
         while (read != len) {
             num = ::read(sockfd_, static_cast<char *>(data) + read, len - read);
             if(num < 0 && read == 0){
-                throw std::runtime_error("Невозможно ничего прочитать");
+                throw TcpException("could not read anything");
             }
             read += num;
             if (read == last_it) {
-                throw std::runtime_error("Полученно недостаточное количество байт для чтения");
+                throw TcpException("received not enough to read");
             }
             last_it = read;
         }
@@ -92,7 +93,7 @@ namespace server {
     void Connection::close(){
         if(sockfd_ != -1 && !is_open_) {
             if (::close(sockfd_) < 0) {
-                throw std::runtime_error("Ошибка закрытия сервера");
+                throw TcpException("close server failed");
             }
         }
         is_open_ = false;
@@ -109,7 +110,7 @@ namespace server {
                        SO_RCVTIMEO,
                        &timeout,
                        sizeof(timeout)) < 0){
-            throw std::runtime_error("Ошибка установления timeout");
+            throw TcpException("timeout failed");
         }
 
     }
@@ -133,7 +134,7 @@ namespace server {
         addr_.sin_addr.s_addr = ::inet_addr(addr.c_str());
         if(::connect(sockfd_, (struct sockaddr *)&addr_, sizeof(addr_)) < 0){
             close();
-            throw std::runtime_error("Ошибка соединения");
+            throw TcpException("connection failed");
         }
         is_open_ = true;
     }
