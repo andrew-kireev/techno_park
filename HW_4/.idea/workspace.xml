@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
+    <generated>
+      <config projectName="tcp" targetName="Log" />
+      <config projectName="tcp" targetName="client" />
+      <config projectName="tcp" targetName="server" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f8891fce-2c33-4b44-b55e-1b55d685d575" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="ProjectId" id="1aOiDxExUFUAgDyimCZSs38MDDF" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Загрузки/tp_advanced_cpp_project-epoll" />
+    <property name="settings.editor.selected.configurable" value="CPPToolchains" />
+  </component>
+  <component name="RunManager" selected="CMake Application.server">
+    <configuration name="Log" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="tcp" TARGET_NAME="Log" CONFIG_NAME="Debug">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="client" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="tcp" TARGET_NAME="client" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="tcp" RUN_TARGET_NAME="client">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="server" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="tcp" TARGET_NAME="server" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="tcp" RUN_TARGET_NAME="server">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="CMake Application.client" />
+      <item itemvalue="CMake Application.server" />
+      <item itemvalue="CMake Application.Log" />
+    </list>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f8891fce-2c33-4b44-b55e-1b55d685d575" name="Default Changelist" comment="" />
+      <created>1586612925109</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1586612925109</updated>
+      <workItem from="1586612928049" duration="4982000" />
+      <workItem from="1586632123863" duration="1113000" />
+      <workItem from="1586679441847" duration="6371000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="743" y="310" width="424" height="484" key="FileChooserDialogImpl" timestamp="1586682217649">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="743" y="310" width="424" height="484" key="FileChooserDialogImpl/0.27.1920.1053@0.27.1920.1053" timestamp="1586682217649" />
+    <state width="1874" height="192" key="GridCell.Tab.0.bottom" timestamp="1586686908947">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1874" height="192" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1586686908947" />
+    <state width="1874" height="192" key="GridCell.Tab.0.center" timestamp="1586686908944">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1874" height="192" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1586686908944" />
+    <state width="1874" height="192" key="GridCell.Tab.0.left" timestamp="1586686908943">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1874" height="192" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1586686908943" />
+    <state width="1874" height="192" key="GridCell.Tab.0.right" timestamp="1586686908946">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1874" height="192" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1586686908946" />
+    <state x="616" y="380" key="com.intellij.ide.util.TipDialog" timestamp="1586612929645">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="616" y="380" key="com.intellij.ide.util.TipDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1586612929645" />
+    <state x="623" y="257" width="672" height="678" key="search.everywhere.popup" timestamp="1586633808935">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="623" y="257" width="672" height="678" key="search.everywhere.popup/0.27.1920.1053@0.27.1920.1053" timestamp="1586633808935" />
+  </component>
+</project>
