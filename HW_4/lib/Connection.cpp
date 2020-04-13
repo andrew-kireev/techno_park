@@ -42,6 +42,18 @@ namespace server {
     size_t Connection::write(const void *data, std::size_t len) {
         ssize_t bytes = ::write(sockfd_, data, len);
 
+
+        if (bytes < 0){
+            if (errno == EINTR) {
+                return bytes;
+            }else if (errno == EAGAIN || errno == EWOULDBLOCK){
+                return 0;
+            }else{
+                return -1;
+            }
+        }
+
+
         if(bytes < 0){
             throw TcpException("could not write anything");
         }
@@ -58,13 +70,25 @@ namespace server {
             last_it = wr;
         }
     }
-
+`
     size_t Connection::read(void *data, std::size_t len) {
         if (!is_open_){
             throw TcpException("closed descriptor");
         }
 
         ssize_t bytes = ::read(sockfd_, data, len);
+
+
+        if (bytes < 0){
+            if (errno == EINTR){
+                return bytes;
+            }else if (errno == EAGAIN || errno == EWOULDBLOCK){
+                return 0;
+            }else{
+                return -1;
+            }
+        }
+
 
         if (bytes == 0) {
             is_open_ = false;

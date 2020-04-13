@@ -2,9 +2,9 @@
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated>
-      <config projectName="tcp" targetName="Log" />
-      <config projectName="tcp" targetName="client" />
-      <config projectName="tcp" targetName="server" />
+      <config projectName="epoll_tcp" targetName="server" />
+      <config projectName="epoll_tcp" targetName="Log" />
+      <config projectName="epoll_tcp" targetName="client" />
     </generated>
   </component>
   <component name="CMakeSettings">
@@ -13,7 +13,11 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f8891fce-2c33-4b44-b55e-1b55d685d575" name="Default Changelist" comment="" />
+    <list default="true" id="f8891fce-2c33-4b44-b55e-1b55d685d575" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Connection.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Connection.cpp" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,7 +27,11 @@
     <option name="formatViaClangd" value="false" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
   <component name="ProjectId" id="1aOiDxExUFUAgDyimCZSs38MDDF" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -31,22 +39,23 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Загрузки/tp_advanced_cpp_project-epoll" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="CPPToolchains" />
   </component>
   <component name="RunManager" selected="CMake Application.server">
-    <configuration name="Log" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="tcp" TARGET_NAME="Log" CONFIG_NAME="Debug">
+    <configuration name="Log" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="epoll_tcp" TARGET_NAME="Log" CONFIG_NAME="Debug">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="client" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="tcp" TARGET_NAME="client" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="tcp" RUN_TARGET_NAME="client">
+    <configuration name="client" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="epoll_tcp" TARGET_NAME="client" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="epoll_tcp" RUN_TARGET_NAME="client">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="server" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="tcp" TARGET_NAME="server" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="tcp" RUN_TARGET_NAME="server">
+    <configuration name="server" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="epoll_tcp" TARGET_NAME="server" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="epoll_tcp" RUN_TARGET_NAME="server">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -70,6 +79,7 @@
       <workItem from="1586612928049" duration="4982000" />
       <workItem from="1586632123863" duration="1113000" />
       <workItem from="1586679441847" duration="6371000" />
+      <workItem from="1586768436760" duration="383000" />
     </task>
     <servers />
   </component>
@@ -77,26 +87,38 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="753" y="134" width="911" height="847" key="CommitChangelistDialog2" timestamp="1586769092414">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="753" y="134" width="911" height="847" key="CommitChangelistDialog2/0.27.1920.1053@0.27.1920.1053" timestamp="1586769092414" />
+    <state x="100" y="125" width="1720" height="855" key="DiffContextDialog" timestamp="1586768980168">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="100" y="125" width="1720" height="855" key="DiffContextDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1586768980168" />
     <state x="743" y="310" width="424" height="484" key="FileChooserDialogImpl" timestamp="1586682217649">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="743" y="310" width="424" height="484" key="FileChooserDialogImpl/0.27.1920.1053@0.27.1920.1053" timestamp="1586682217649" />
-    <state width="1874" height="192" key="GridCell.Tab.0.bottom" timestamp="1586686908947">
+    <state width="1874" height="192" key="GridCell.Tab.0.bottom" timestamp="1586768697778">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="192" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1586686908947" />
-    <state width="1874" height="192" key="GridCell.Tab.0.center" timestamp="1586686908944">
+    <state width="1874" height="192" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1586768697778" />
+    <state width="1874" height="192" key="GridCell.Tab.0.center" timestamp="1586768697778">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="192" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1586686908944" />
-    <state width="1874" height="192" key="GridCell.Tab.0.left" timestamp="1586686908943">
+    <state width="1874" height="192" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1586768697778" />
+    <state width="1874" height="192" key="GridCell.Tab.0.left" timestamp="1586768697777">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="192" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1586686908943" />
-    <state width="1874" height="192" key="GridCell.Tab.0.right" timestamp="1586686908946">
+    <state width="1874" height="192" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1586768697777" />
+    <state width="1874" height="192" key="GridCell.Tab.0.right" timestamp="1586768697778">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="192" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1586686908946" />
+    <state width="1874" height="192" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1586768697778" />
+    <state x="803" y="470" width="303" height="164" key="VCS.ChangelistChooser" timestamp="1586768965035">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="803" y="470" width="303" height="164" key="VCS.ChangelistChooser/0.27.1920.1053@0.27.1920.1053" timestamp="1586768965035" />
     <state x="616" y="380" key="com.intellij.ide.util.TipDialog" timestamp="1586612929645">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
