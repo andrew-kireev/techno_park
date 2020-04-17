@@ -15,13 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f8891fce-2c33-4b44-b55e-1b55d685d575" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/Connection.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Connection.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/Server.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Server.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/exception.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/exception.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Connection.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Connection.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Server.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Server.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test_client.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/test_client.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test_server.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/test_server.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +80,7 @@
       <workItem from="1586768436760" duration="383000" />
       <workItem from="1586768951325" duration="543000" />
       <workItem from="1587028761223" duration="2173000" />
-      <workItem from="1587111035263" duration="9406000" />
+      <workItem from="1587111035263" duration="10000000" />
     </task>
     <task id="LOCAL-00001" summary="catching error in write/read">
       <created>1586769107467</created>
