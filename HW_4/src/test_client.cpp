@@ -4,7 +4,7 @@
 #include "Connection.h"
 
 int main() {
-    server::Connection con("0.0.0.0", 1226);
+    epoll_server::Connection con("0.0.0.0", 1226);
     std::string data(" ");
     while (!data.empty() || (data == "^D" && con.is_opened()))
     {

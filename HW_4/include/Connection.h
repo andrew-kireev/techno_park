@@ -11,7 +11,7 @@
 #include <string>
 
 
-namespace server {
+namespace epoll_server {
 
     class Connection {
     public:
@@ -43,6 +43,8 @@ namespace server {
 
         void recv_size(size_t& data);
 
+        int get_con();
+
     private:
         Connection(int sock_fd, const sockaddr_in& sock_info);
         
@@ -50,6 +52,8 @@ namespace server {
         std::string dst_addr_;
         uint16_t dst_port_;
         bool is_open_ = false;
+
+
     };
 
 

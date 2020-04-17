@@ -2,9 +2,9 @@
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated>
-      <config projectName="epoll_tcp" targetName="server" />
       <config projectName="epoll_tcp" targetName="Log" />
       <config projectName="epoll_tcp" targetName="client" />
+      <config projectName="epoll_tcp" targetName="server" />
     </generated>
   </component>
   <component name="CMakeSettings">
@@ -14,9 +14,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f8891fce-2c33-4b44-b55e-1b55d685d575" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/Connection.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Connection.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/Server.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/Server.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/exception.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/exception.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/Connection.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Connection.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/Server.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Server.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test_client.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/test_client.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test_server.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/test_server.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +46,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/tp_advcpp_homework-hw4" />
     <property name="settings.editor.selected.configurable" value="CPPToolchains" />
   </component>
   <component name="RunManager" selected="CMake Application.server">
@@ -80,49 +85,88 @@
       <workItem from="1586632123863" duration="1113000" />
       <workItem from="1586679441847" duration="6371000" />
       <workItem from="1586768436760" duration="383000" />
+      <workItem from="1586768951325" duration="543000" />
+      <workItem from="1587028761223" duration="2173000" />
+      <workItem from="1587111035263" duration="9406000" />
     </task>
+    <task id="LOCAL-00001" summary="catching error in write/read">
+      <created>1586769107467</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1586769107467</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="catching error in write/read" />
+    <option name="LAST_COMMIT_MESSAGE" value="catching error in write/read" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="753" y="134" width="911" height="847" key="CommitChangelistDialog2" timestamp="1586769092414">
+    <state x="753" y="134" width="911" height="847" key="CommitChangelistDialog2" timestamp="1586769107259">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="753" y="134" width="911" height="847" key="CommitChangelistDialog2/0.27.1920.1053@0.27.1920.1053" timestamp="1586769092414" />
+    <state x="753" y="134" width="911" height="847" key="CommitChangelistDialog2/0.27.1920.1053@0.27.1920.1053" timestamp="1586769107259" />
     <state x="100" y="125" width="1720" height="855" key="DiffContextDialog" timestamp="1586768980168">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="100" y="125" width="1720" height="855" key="DiffContextDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1586768980168" />
-    <state x="743" y="310" width="424" height="484" key="FileChooserDialogImpl" timestamp="1586682217649">
+    <state x="743" y="310" width="424" height="484" key="FileChooserDialogImpl" timestamp="1587113437198">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state x="743" y="310" width="424" height="484" key="FileChooserDialogImpl/0.27.1920.1053@0.27.1920.1053" timestamp="1586682217649" />
-    <state width="1874" height="192" key="GridCell.Tab.0.bottom" timestamp="1586768697778">
+    <state x="743" y="310" width="424" height="484" key="FileChooserDialogImpl/0.27.1920.1053@0.27.1920.1053" timestamp="1587113437198" />
+    <state width="1874" height="206" key="GridCell.Tab.0.bottom" timestamp="1587120291321">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="192" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1586768697778" />
-    <state width="1874" height="192" key="GridCell.Tab.0.center" timestamp="1586768697778">
+    <state width="1874" height="206" key="GridCell.Tab.0.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1587120291321" />
+    <state width="1874" height="206" key="GridCell.Tab.0.center" timestamp="1587120291321">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="192" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1586768697778" />
-    <state width="1874" height="192" key="GridCell.Tab.0.left" timestamp="1586768697777">
+    <state width="1874" height="206" key="GridCell.Tab.0.center/0.27.1920.1053@0.27.1920.1053" timestamp="1587120291321" />
+    <state width="1874" height="206" key="GridCell.Tab.0.left" timestamp="1587120291320">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="192" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1586768697777" />
-    <state width="1874" height="192" key="GridCell.Tab.0.right" timestamp="1586768697778">
+    <state width="1874" height="206" key="GridCell.Tab.0.left/0.27.1920.1053@0.27.1920.1053" timestamp="1587120291320" />
+    <state width="1874" height="206" key="GridCell.Tab.0.right" timestamp="1587120291321">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
-    <state width="1874" height="192" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1586768697778" />
+    <state width="1874" height="206" key="GridCell.Tab.0.right/0.27.1920.1053@0.27.1920.1053" timestamp="1587120291321" />
+    <state width="1874" height="344" key="GridCell.Tab.1.bottom" timestamp="1587118310787">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1874" height="344" key="GridCell.Tab.1.bottom/0.27.1920.1053@0.27.1920.1053" timestamp="1587118310787" />
+    <state width="1874" height="344" key="GridCell.Tab.1.center" timestamp="1587118310786">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1874" height="344" key="GridCell.Tab.1.center/0.27.1920.1053@0.27.1920.1053" timestamp="1587118310786" />
+    <state width="1874" height="344" key="GridCell.Tab.1.left" timestamp="1587118310785">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1874" height="344" key="GridCell.Tab.1.left/0.27.1920.1053@0.27.1920.1053" timestamp="1587118310785" />
+    <state width="1874" height="344" key="GridCell.Tab.1.right" timestamp="1587118310786">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state width="1874" height="344" key="GridCell.Tab.1.right/0.27.1920.1053@0.27.1920.1053" timestamp="1587118310786" />
     <state x="803" y="470" width="303" height="164" key="VCS.ChangelistChooser" timestamp="1586768965035">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="803" y="470" width="303" height="164" key="VCS.ChangelistChooser/0.27.1920.1053@0.27.1920.1053" timestamp="1586768965035" />
+    <state x="555" y="277" width="800" height="551" key="Vcs.Push.Dialog.v2" timestamp="1586769115212">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="555" y="277" width="800" height="551" key="Vcs.Push.Dialog.v2/0.27.1920.1053@0.27.1920.1053" timestamp="1586769115212" />
     <state x="616" y="380" key="com.intellij.ide.util.TipDialog" timestamp="1586612929645">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>
     <state x="616" y="380" key="com.intellij.ide.util.TipDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1586612929645" />
+    <state x="624" y="253" key="run.anything.popup" timestamp="1587117616965">
+      <screen x="0" y="27" width="1920" height="1053" />
+    </state>
+    <state x="624" y="253" key="run.anything.popup/0.27.1920.1053@0.27.1920.1053" timestamp="1587117616965" />
     <state x="623" y="257" width="672" height="678" key="search.everywhere.popup" timestamp="1586633808935">
       <screen x="0" y="27" width="1920" height="1053" />
     </state>

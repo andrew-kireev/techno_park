@@ -12,11 +12,9 @@
 #include "Server.h"
 #include "exception.h"
 
-namespace server {
+namespace epoll_server {
 
-    Server::Server(const std::string& ip, uint16_t port, std::function<void(Connection&)> callback_read,
-            std::function<void(Connection&)> callback_write) : callback_read_(std::move(callback_read)),
-                    callback_write_(std::move(callback_write)){
+    Server::Server(const std::string& ip, uint16_t port){
         open(ip, port);
     }
 
@@ -28,13 +26,28 @@ namespace server {
         }
     }
 
+    void Server::set_handlers(callback callback_read, callback callback_write){
+        callback_read_ = std::move(callback_read);
+        callback_write_ = std::move(callback_write);
+    }
+
     void Server::close(){
         if(listenfd_ != -1 && !server_stat_) {
             if (::close(listenfd_) < 0) {
                 throw TcpException("close failed");
             }
         }
+
         server_stat_ = false;
+    }
+
+    void Server::close_epoll(){
+        if(epoll_ != -1) {
+            if (::close(epoll_) < 0) {
+                throw TcpException("close failed");
+            }
+        }
+        epoll_stat = false;
     }
 
     Connection Server::accept(){
@@ -70,12 +83,14 @@ namespace server {
     }
 
     void Server::create_epoll(){
-        epoll_ = epoll_create(1);
-        if(epoll_ < 0){
+        int temp_epoll = epoll_create(1);
+        if(temp_epoll < 0){
             close();
             throw TcpException("error crating epoll");
         }
+        epoll_ = temp_epoll;
         add_epoll(listenfd_, EPOLLIN);
+        epoll_stat = true;
     }
 
 
@@ -84,6 +99,7 @@ namespace server {
         event.data.fd = fd;
         event.events = events;
         if(epoll_ctl(epoll_, EPOLL_CTL_ADD, fd, &event) < 0){
+            close();
             throw TcpException("epoll_ctl error");
         }
         connects_.emplace(std::make_pair(fd, Connection(fd)));
@@ -150,7 +166,25 @@ namespace server {
 
     void Server::set_max_connection(int num_connections){
         max_connection_ = num_connections;
-        listen(listenfd_, max_connection_);
+        if(listen(listenfd_, max_connection_) < 0){
+            close();
+            throw TcpException("listen failed");
+        }
+    }
+
+    void Server::modify_epoll(int fd, uint32_t events){
+        epoll_event event{};
+        event.data.fd = fd;
+        event.events = events;
+
+        if (epoll_ctl(epoll_, EPOLL_CTL_MOD, fd, &event) < 0) {
+            throw TcpException("epoll_ctl error");
+        }
+    }
+
+
+    void Server::erase_connection(int con){
+        connects_.erase(con);
     }
 }
 

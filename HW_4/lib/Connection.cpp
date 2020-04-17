@@ -12,7 +12,8 @@
 #include "exception.h"
 
 
-namespace server {
+namespace epoll_server {
+
 
     Connection::Connection(std::string ip, uint16_t port) : dst_addr_(std::move(ip)), dst_port_(port){
         sockfd_ = socket(AF_INET, SOCK_STREAM, 0);
@@ -70,7 +71,7 @@ namespace server {
             last_it = wr;
         }
     }
-`
+
     size_t Connection::read(void *data, std::size_t len) {
         if (!is_open_){
             throw TcpException("closed descriptor");
@@ -166,5 +167,10 @@ namespace server {
         }
         is_open_ = true;
     }
+
+    int Connection::get_con(){
+        return sockfd_;
+    }
+
 
 }

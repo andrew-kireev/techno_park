@@ -8,15 +8,19 @@
 #include <string>
 #include <exception>
 
-class TcpException : public std::exception{
-public:
-    explicit TcpException(std::string msg) : msg_(std::move(msg)) {};
+namespace  epoll_server {
 
-    const char* what() const noexcept {
-        return msg_.c_str();
+    class TcpException : public std::exception {
+    public:
+        explicit TcpException(std::string msg) : msg_(std::move(msg)) {};
+
+        const char *what() const noexcept {
+            return msg_.c_str();
+        };
+    private:
+        std::string msg_;
     };
-private:
-    std::string msg_;
-};
+
+}
 
 #endif //TCP_EXCEPTION_H

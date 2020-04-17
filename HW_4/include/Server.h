@@ -11,16 +11,18 @@
 
 #include "Connection.h"
 
-namespace server {
+namespace epoll_server {
 
     class Server {
+        using callback = std::function<void(Connection&)>;
     public:
-        Server(const std::string& ip, uint16_t port, std::function<void(Connection&)> callback_read,
-               std::function<void(Connection&)> callback_write);
+        Server(const std::string& ip, uint16_t port);
 
         ~Server() noexcept;
 
         void close();
+
+        void set_handlers(callback callback_read, callback callback_write);
 
         Connection accept();
 
@@ -38,13 +40,20 @@ namespace server {
 
         void handle_client(int fd, uint32_t event);
 
+        void close_epoll();
+
+        void erase_connection(int con);
+
+        void modify_epoll(int fd, uint32_t events);
+
     private:
         int listenfd_;
         int epoll_;
         std::unordered_map<int, Connection> connects_;
-        std::function<void(Connection&)> callback_read_;
-        std::function<void(Connection&)> callback_write_;
+        callback callback_read_;
+        callback callback_write_;
         bool server_stat_ = false;
+        bool epoll_stat = false;
         size_t max_connection_ = 128;
     };
 
