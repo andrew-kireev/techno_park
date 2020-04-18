@@ -7,16 +7,18 @@
 
 #include <string>
 #include <exception>
+namespace server {
 
-class TcpException : public std::exception{
-public:
-    explicit TcpException(std::string msg) : msg_(std::move(msg)) {};
+    class TcpException : public std::exception {
+    public:
+        explicit TcpException(std::string msg) : msg_(std::move(msg)) {};
 
-    const char* what() const noexcept {
-        return msg_.c_str();
+        const char *what() const noexcept {
+            return msg_.c_str();
+        };
+    private:
+        std::string msg_;
     };
-private:
-    std::string msg_;
-};
+}
 
 #endif //TCP_EXCEPTION_H

@@ -4,9 +4,9 @@
 #include "Connection.h"
 
 int main() {
-    server::Connection con("192.168.2.246", 1226);
+    server::Connection con("192.168.2.246", 1231);
     std::string data(" ");
-    while (!data.empty() || (data == "^D" && con.is_opened()))
+    while (!data.empty() && data != "close" && con.is_opened())
     {
         data.clear();
         std::cin >> data;

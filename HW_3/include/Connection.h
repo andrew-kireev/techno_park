@@ -47,7 +47,7 @@ namespace server {
         int sockfd_;
         std::string dst_addr_;
         uint16_t dst_port_;
-        bool is_open_ = false;
+        bool is_readable = false;
     };
 
 

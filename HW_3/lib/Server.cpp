@@ -19,18 +19,19 @@ namespace server {
     Server::~Server() noexcept{
         try {
             close();
-        } catch (std::runtime_error& er){
+        } catch (TcpException& er){
             std::cerr << "close failed" << er.what() << std::endl;
         }
     }
 
     void Server::close(){
-        if(listenfd_ != -1 && !server_stat_) {
+        if(listenfd_ != -1) {
             if (::close(listenfd_) < 0) {
+                listenfd_ = -1;
                 throw TcpException("server close failed");
             }
         }
-        server_stat_ = false;
+        listenfd_ = -1;
     }
 
     Connection Server::accept(){
@@ -60,12 +61,13 @@ namespace server {
             throw TcpException("bind failed");
         }
         set_max_connection(max_connection_);
-        server_stat_ = true;
     }
 
 
     void Server::set_max_connection(int num_connections){
         max_connection_ = num_connections;
-        listen(listenfd_, max_connection_);
+        if(listen(listenfd_, max_connection_) < 0){
+            throw TcpException("listen failed");
+        }
     }
 }

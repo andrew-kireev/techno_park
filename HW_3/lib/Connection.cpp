@@ -4,7 +4,7 @@
 
 
 #include <exception>
-#include <unistd.h>
+#include <zconf.h>
 #include <arpa/inet.h>
 #include <iostream>
 
@@ -24,8 +24,7 @@ namespace server {
     }
 
     Connection::Connection(int sockfd, const sockaddr_in& sock): sockfd_(sockfd),
-                                                                 dst_port_(sock.sin_port), is_open_(true){
-        sockfd = -1;
+                                                                 dst_port_(sock.sin_port){
     }
 
 
@@ -38,10 +37,14 @@ namespace server {
     }
 
     size_t Connection::write(const void *data, std::size_t len) {
+        if (sockfd_ == -1){
+            throw TcpException("closed descriptor");
+        }
         ssize_t bytes = ::write(sockfd_, data, len);
         if(bytes < 0){
             throw TcpException("could not write anything");
         }
+        is_readable = true;
         return bytes;
     }
 
@@ -57,31 +60,25 @@ namespace server {
     }
 
     size_t Connection::read(void *data, std::size_t len) {
-        if (!is_open_){
+        if (!is_readable || sockfd_ == -1){
             throw TcpException("closed descriptor");
         }
 
         ssize_t bytes = ::read(sockfd_, data, len);
         if (bytes == 0) {
-            is_open_ = false;
+            is_readable = false;
         } else if (bytes < 0) {
+            is_readable = false;
             throw TcpException("could not read anything");
         }
         return bytes;
     }
 
     void Connection::readExact(void *data, size_t len) {
-        if (!is_open_){
-            throw TcpException("closed descriptor");
-        }
-
         std::size_t read = 0, last_it = 0;
         size_t num;
         while (read != len) {
             num = ::read(sockfd_, static_cast<char *>(data) + read, len - read);
-            if(num < 0 && read == 0){
-                throw TcpException("could not read anything");
-            }
             read += num;
             if (read == last_it) {
                 throw TcpException("received not enough to read");
@@ -91,16 +88,18 @@ namespace server {
     }
 
     void Connection::close(){
-        if(sockfd_ != -1 && !is_open_) {
+        if(sockfd_ != -1) {
             if (::close(sockfd_) < 0) {
+                sockfd_ = -1;
                 throw TcpException("close server failed");
             }
         }
-        is_open_ = false;
+        sockfd_ = -1;
     }
 
     bool Connection::is_opened() const {
-        return is_open_;
+        if(sockfd_ != -1) return true;
+        return false;
     }
 
     void Connection::set_timeout(int time){
@@ -136,7 +135,6 @@ namespace server {
             close();
             throw TcpException("connection failed");
         }
-        is_open_ = true;
     }
 
 }
