@@ -12,10 +12,11 @@
 #include "exception.h"
 
 
+
 namespace epoll_server {
 
 
-    Connection::Connection(std::string ip, uint16_t port) : dst_addr_(std::move(ip)), dst_port_(port){
+    Connection::Connection(const std::string& ip, uint16_t port) : dst_addr_(ip), dst_port_(port){
         sockfd_ = socket(AF_INET, SOCK_STREAM, 0);
         if(sockfd_ < 0){
             close();
@@ -25,41 +26,42 @@ namespace epoll_server {
     }
 
     Connection::Connection(int sockfd, const sockaddr_in& sock): sockfd_(sockfd),
-                                                                 dst_port_(sock.sin_port), is_open_(true){
-        sockfd = -1;
+                                                                 dst_port_(sock.sin_port){
     }
 
-    Connection::Connection(int fd) : sockfd_(fd), is_open_(true){}
+    Connection::Connection(int fd) : sockfd_(fd){}
+
+    Connection::Connection(Descriptor&& fd) : sockfd_(std::move(fd)){}
 
 
     Connection::~Connection() noexcept{
         try {
-            close();
-        } catch (std::runtime_error& er){
+            if(!is_opened()) {
+                close();
+            }
+        } catch (TcpException& er){
             std::cerr << "closing fail" << er.what() << std::endl;
         }
     }
 
     size_t Connection::write(const void *data, std::size_t len) {
+        if(sockfd_ == -1){
+            throw TcpException("closed descriptor");
+        }
         ssize_t bytes = ::write(sockfd_, data, len);
 
 
         if (bytes < 0){
-            if (errno == EINTR) {
-                return bytes;
-            }else if (errno == EAGAIN || errno == EWOULDBLOCK){
+            if (errno == EAGAIN || errno == EWOULDBLOCK){
                 return 0;
-            }else{
-                return -1;
             }
-        }
-
-
-        if(bytes < 0){
             throw TcpException("could not write anything");
         }
+        is_readable = true;
         return bytes;
     }
+
+
 
     void Connection::writeExact(const void *data, size_t len) {
         size_t wr = 0, last_it = 0;
@@ -72,38 +74,42 @@ namespace epoll_server {
         }
     }
 
+    size_t Connection::write_buffer(size_t size){
+        buffer.resize(size);
+        write(buffer.data(), size);
+        buffer_ws = buffer;
+        is_readable = true;
+        return buffer.size();
+    }
+    size_t Connection::read_buffer(const void *data){
+        read(buffer.data(), buffer.size());
+        is_readable = false;
+        return buffer.size();
+    }
+
     size_t Connection::read(void *data, std::size_t len) {
-        if (!is_open_){
+        if (!is_readable || sockfd_ == -1){
             throw TcpException("closed descriptor");
         }
-
         ssize_t bytes = ::read(sockfd_, data, len);
 
 
         if (bytes < 0){
-            if (errno == EINTR){
-                return bytes;
-            }else if (errno == EAGAIN || errno == EWOULDBLOCK){
+            is_readable = false;
+            if (errno == EAGAIN || errno == EWOULDBLOCK){
                 return 0;
-            }else{
-                return -1;
             }
-        }
-
-
-        if (bytes == 0) {
-            is_open_ = false;
-        } else if (bytes < 0) {
             throw TcpException("could not read anything");
         }
+
+        if (bytes == 0) {
+            is_readable = false;
+        }
+
         return bytes;
     }
 
     void Connection::readExact(void *data, size_t len) {
-        if (!is_open_){
-            throw TcpException("closed descriptor");
-        }
-
         std::size_t read = 0, last_it = 0;
         size_t num;
         while (read != len) {
@@ -120,16 +126,18 @@ namespace epoll_server {
     }
 
     void Connection::close(){
-        if(sockfd_ != -1 && !is_open_) {
+        if(sockfd_ != -1) {
+            sockfd_ = -1;
             if (::close(sockfd_) < 0) {
-                throw TcpException("close failed");
+                throw TcpException("close failedyyyyyyyy");
             }
         }
-        is_open_ = false;
+        sockfd_ = -1;
     }
 
     bool Connection::is_opened() const {
-        return is_open_;
+        if(sockfd_ != -1) return true;
+        return false;
     }
 
     void Connection::set_timeout(int time){
@@ -165,11 +173,14 @@ namespace epoll_server {
             close();
             throw TcpException("connecting failed");
         }
-        is_open_ = true;
     }
 
-    int Connection::get_con(){
+    int Connection::get_con() const {
         return sockfd_;
+    }
+
+    std::string Connection::get_buffer() const{
+        return buffer_ws;
     }
 
 

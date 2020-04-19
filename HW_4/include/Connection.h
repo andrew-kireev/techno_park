@@ -9,6 +9,9 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <string>
+#include <vector>
+
+#include <Descriptor.h>
 
 
 namespace epoll_server {
@@ -17,9 +20,12 @@ namespace epoll_server {
     public:
         friend class Server;
 
-        Connection(std::string ip, const uint16_t port);
+        Connection(const std::string& ip, const uint16_t port);
 
         Connection(int fd);
+
+        Connection(Descriptor&& fd);
+
 
         ~Connection() noexcept;
 
@@ -43,7 +49,13 @@ namespace epoll_server {
 
         void recv_size(size_t& data);
 
-        int get_con();
+        size_t read_buffer(const void *data);
+
+        size_t write_buffer(size_t size);
+
+        std::string get_buffer() const;
+
+        int get_con() const;
 
     private:
         Connection(int sock_fd, const sockaddr_in& sock_info);
@@ -51,8 +63,9 @@ namespace epoll_server {
         int sockfd_;
         std::string dst_addr_;
         uint16_t dst_port_;
-        bool is_open_ = false;
-
+        bool is_readable = false;
+        std::string buffer;
+        std::string buffer_ws;
 
     };
 

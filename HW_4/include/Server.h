@@ -42,18 +42,16 @@ namespace epoll_server {
 
         void close_epoll();
 
-        void erase_connection(int con);
+        void erase_connection(const Connection& con);
 
         void modify_epoll(int fd, uint32_t events);
 
     private:
-        int listenfd_;
-        int epoll_;
+        Descriptor listenfd_;
+        Descriptor epoll_;
         std::unordered_map<int, Connection> connects_;
         callback callback_read_;
         callback callback_write_;
-        bool server_stat_ = false;
-        bool epoll_stat = false;
         size_t max_connection_ = 128;
     };
 

@@ -4,7 +4,6 @@
 
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <unistd.h>
 #include <iostream>
 #include <sys/epoll.h>
 
@@ -13,6 +12,8 @@
 #include "exception.h"
 
 namespace epoll_server {
+
+    using std::make_pair;
 
     Server::Server(const std::string& ip, uint16_t port){
         open(ip, port);
@@ -32,23 +33,10 @@ namespace epoll_server {
     }
 
     void Server::close(){
-        if(listenfd_ != -1 && !server_stat_) {
-            if (::close(listenfd_) < 0) {
-                throw TcpException("close failed");
-            }
-        }
-
-        server_stat_ = false;
+        listenfd_.close();
+        epoll_.close();
     }
 
-    void Server::close_epoll(){
-        if(epoll_ != -1) {
-            if (::close(epoll_) < 0) {
-                throw TcpException("close failed");
-            }
-        }
-        epoll_stat = false;
-    }
 
     Connection Server::accept(){
         sockaddr_in client_addr{};
@@ -73,24 +61,20 @@ namespace epoll_server {
         addr.sin_port = htons(port);
         addr.sin_addr.s_addr = inet_addr(ip.c_str());
         if (bind(listenfd_, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) != 0) {
-            close();
             throw TcpException("Ошибка bind");
         }
         set_max_connection(max_connection_);
 
         create_epoll();
-        server_stat_ = true;
     }
 
     void Server::create_epoll(){
         int temp_epoll = epoll_create(1);
         if(temp_epoll < 0){
-            close();
             throw TcpException("error crating epoll");
         }
         epoll_ = temp_epoll;
-        add_epoll(listenfd_, EPOLLIN);
-        epoll_stat = true;
+        add_epoll(listenfd_, EPOLLIN | EPOLLOUT);
     }
 
 
@@ -99,10 +83,9 @@ namespace epoll_server {
         event.data.fd = fd;
         event.events = events;
         if(epoll_ctl(epoll_, EPOLL_CTL_ADD, fd, &event) < 0){
-            close();
             throw TcpException("epoll_ctl error");
         }
-        connects_.emplace(std::make_pair(fd, Connection(fd)));
+        connects_.emplace(fd, Connection(fd));
     }
 
     void Server::event_loop(){
@@ -117,7 +100,7 @@ namespace epoll_server {
 
             for(int n = 0; n < nfds; ++n){
                 int fd = events[n].data.fd;
-                auto event = events[n].events;
+                uint32_t event = events[n].events;
 
                 if(fd == listenfd_){
                     accept_clients();
@@ -144,16 +127,13 @@ namespace epoll_server {
                 else
                     throw TcpException("accept4 failed");
             }
-            add_epoll(fd, EPOLLIN);
+            add_epoll(fd, EPOLLOUT);
         }
     }
 
     void Server::handle_client(int fd, uint32_t event){
         if(event & EPOLLHUP || event & EPOLLERR){
-            if(::close(fd) < 0) {
-                connects_.erase(fd);
-                throw TcpException("close failed");
-            }
+            connects_.erase(fd);
             return;
         }
         if (event & EPOLLIN) {
@@ -167,7 +147,6 @@ namespace epoll_server {
     void Server::set_max_connection(int num_connections){
         max_connection_ = num_connections;
         if(listen(listenfd_, max_connection_) < 0){
-            close();
             throw TcpException("listen failed");
         }
     }
@@ -183,10 +162,11 @@ namespace epoll_server {
     }
 
 
-    void Server::erase_connection(int con){
-        connects_.erase(con);
+    void Server::erase_connection(const Connection& con){
+        connects_.erase(con.get_con());
     }
 }
+
 
 
 
