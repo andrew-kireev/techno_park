@@ -22,7 +22,7 @@ namespace epoll_server {
     Server::~Server() noexcept{
         try {
             close();
-        } catch (std::runtime_error& er){
+        } catch (TcpException& er){
             std::cerr << "close failed" << er.what() << std::endl;
         }
     }

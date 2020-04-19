@@ -129,7 +129,7 @@ namespace epoll_server {
         if(sockfd_ != -1) {
             sockfd_ = -1;
             if (::close(sockfd_) < 0) {
-                throw TcpException("close failedyyyyyyyy");
+                throw TcpException("close failed");
             }
         }
         sockfd_ = -1;
