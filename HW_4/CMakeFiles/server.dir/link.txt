@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/server.dir/src/test_server.cpp.o  -o server -Wl,-rpath,/home/andrew/Documents/tehno_park/techno_park/HW_4/lib lib/libLog.so 

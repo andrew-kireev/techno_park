@@ -1,6 +1,0 @@
-/home/andrew/Documents/tehno_park/techno_park/HW_4/CMakeFiles/rebuild_cache.dir
-/home/andrew/Documents/tehno_park/techno_park/HW_4/CMakeFiles/server.dir
-/home/andrew/Documents/tehno_park/techno_park/HW_4/CMakeFiles/edit_cache.dir
-/home/andrew/Documents/tehno_park/techno_park/HW_4/lib/CMakeFiles/rebuild_cache.dir
-/home/andrew/Documents/tehno_park/techno_park/HW_4/lib/CMakeFiles/Log.dir
-/home/andrew/Documents/tehno_park/techno_park/HW_4/lib/CMakeFiles/edit_cache.dir
