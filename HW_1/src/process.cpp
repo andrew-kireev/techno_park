@@ -98,7 +98,7 @@ namespace process{
             throw std::runtime_error("Дескриптор вывода закрыт");
         }
 
-        size_t read = 0, last_it = 0;
+        std::size_t read = 0, last_it = 0;
         size_t num;
         while (read != len) {
             num = ::read(stdin_, static_cast<char *>(data) + read, len - read);
@@ -130,4 +130,3 @@ namespace process{
         stdout_ = -1;
     }
 }
-
