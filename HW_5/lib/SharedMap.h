@@ -7,11 +7,12 @@
 
 #include <map>
 #include <sys/mman.h>
+#include <thread>
 
 
 #include "SemaphoreLock.h"
 #include "Allocator.h"
-#include "shmem.h"
+
 
 namespace shmem {
 
@@ -21,8 +22,9 @@ namespace shmem {
         using value_type = typename std::map<Key, Val>::value_type;
         using c_iter = typename std::map<Key, Val>::iterator;
         using iter = typename std::map<Key, Val>::iterator;
+        using semaphore = Semaphore<Allocator>;
 
-        using Map = std::map<Key, Val, std::less<Key>, Allocator<value_type >>;
+        using Map = std::map<Key, Val, std::less<Key>, Allocator<value_type>>;
 
     public:
          SharedMap() = default;
@@ -38,12 +40,12 @@ namespace shmem {
 
         template<typename key, typename val>
         void insert(const key k, val v) {
-            SemaphoreLock lock = SemaphoreLock(sem_);
+            const std::lock_guard<semaphore> lock(sem_);
             map_->insert(std::make_pair(k, v));
         }
 
         ~SharedMap(){
-            SemaphoreLock lock = SemaphoreLock(sem_);
+            const std::lock_guard<semaphore> lock(sem_);
             map_->~map();
         }
 
@@ -65,27 +67,27 @@ namespace shmem {
 
 
         Val& at(const Key& key){
-            SemaphoreLock lock = SemaphoreLock(sem_);
+            const std::lock_guard<semaphore> lock(sem_);
             return map_->at();
         }
 
         iter erase(const iter it) const{
-            SemaphoreLock lock = SemaphoreLock(sem_);
+            const std::lock_guard<semaphore> lock(sem_);
             return map_->erase(it);
         }
 
         iter insert(const Val& value) {
-            SemaphoreLock lock = SemaphoreLock(sem_);
+            const std::lock_guard<semaphore> lock(sem_);
             return map_->insert(value);
         }
 
         void clear() {
-            SemaphoreLock lock = SemaphoreLock(sem_);
+            const std::lock_guard<semaphore> lock(sem_);
             map_->clear();
         }
 
         Val& operator[](const Key& key) {
-            SemaphoreLock lock = SemaphoreLock(sem_);
+            const std::lock_guard<semaphore> lock(sem_);
             return map_->operator[](key);
         }
 

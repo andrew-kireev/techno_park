@@ -4,6 +4,7 @@
 
 
 #include "SharedMap.h"
+#include "shmem.h"
 
 int SIZE = 6048;
 

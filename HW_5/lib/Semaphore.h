@@ -11,8 +11,6 @@
 #include "Allocator.h"
 
 namespace shmem {
-
-
     template <
             template <typename T>
             class Allocator>
