@@ -8,6 +8,7 @@
 #include <map>
 #include <sys/mman.h>
 #include <thread>
+#include <memory>
 
 
 #include "SemaphoreLock.h"
@@ -28,12 +29,13 @@ namespace shmem {
 
     public:
          SharedMap() = default;
+         ~SharedMap() = default;
 
+         //template <typename T>
         SharedMap(Allocator<Map> allocator):
                 sem_(allocator) {
-
-            map_ = allocator.allocate(1);
-            map_ = new (map_) Map{allocator};
+             map_ = allocator.allocate(1);
+             std::allocator_traits<Allocator<Map>>::construct(allocator, map_, allocator);
         }
 
 
@@ -44,10 +46,10 @@ namespace shmem {
             map_->insert(std::make_pair(k, v));
         }
 
-        ~SharedMap(){
-            const std::lock_guard<semaphore> lock(sem_);
-            map_->~map();
-        }
+//        ~SharedMap(){
+//            const std::lock_guard<semaphore> lock(sem_);
+//            std::destroy_at(map_);
+//        }
 
         iter begin() {
             return map_->begin();
@@ -91,10 +93,16 @@ namespace shmem {
             return map_->operator[](key);
         }
 
+        size_t size(){
+            const std::lock_guard<semaphore> lock(sem_);
+            return map_->size();
+        }
+
 
     private:
         Map* map_;
         mutable Semaphore<Allocator> sem_;
+        bool deleted = false;
     };
 
 

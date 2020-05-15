@@ -76,7 +76,5 @@ int main() {
         ::waitpid(pid, nullptr, 0);
     }
 
-
-
     return 0;
 }
